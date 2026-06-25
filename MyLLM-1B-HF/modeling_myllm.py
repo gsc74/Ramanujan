@@ -4,10 +4,10 @@ import torch.nn.functional as F
 from transformers import GenerationMixin, PreTrainedModel
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
-from .configuration_ramanujan import RamanujanConfig
+from .configuration_myllm import MyLLMConfig
 
 
-class RamanujanRMSNorm(nn.Module):
+class MyLLMRMSNorm(nn.Module):
     def __init__(self, size, eps):
         super().__init__()
         self.weight = nn.Parameter(torch.ones(size))
@@ -23,7 +23,7 @@ def rotate_half_interleaved(x):
     return torch.stack((-x[..., 1::2], x[..., ::2]), dim=-1).flatten(-2)
 
 
-class RamanujanRotaryEmbedding(nn.Module):
+class MyLLMRotaryEmbedding(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.head_dim = config.head_dim
@@ -42,7 +42,7 @@ class RamanujanRotaryEmbedding(nn.Module):
         return q * cos + rotate_half_interleaved(q) * sin, k * cos + rotate_half_interleaved(k) * sin
 
 
-class RamanujanAttention(nn.Module):
+class MyLLMAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.num_heads = config.num_attention_heads
@@ -52,7 +52,7 @@ class RamanujanAttention(nn.Module):
         self.k_proj = nn.Linear(config.hidden_size, self.num_kv_heads * self.head_dim, bias=False)
         self.v_proj = nn.Linear(config.hidden_size, self.num_kv_heads * self.head_dim, bias=False)
         self.o_proj = nn.Linear(self.num_heads * self.head_dim, config.hidden_size, bias=False)
-        self.rope = RamanujanRotaryEmbedding(config)
+        self.rope = MyLLMRotaryEmbedding(config)
 
     def forward(self, x, attention_mask=None, position_ids=None, past_key_value=None,
                 use_cache=False, cache=None, layer_idx=None):
@@ -90,7 +90,7 @@ class RamanujanAttention(nn.Module):
         return self.o_proj(y.transpose(1, 2).contiguous().view(batch, length, -1)), new_past_key_value
 
 
-class RamanujanSwiGLU(nn.Module):
+class MyLLMSwiGLU(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.gate_proj = nn.Linear(config.hidden_size, config.intermediate_size, bias=False)
@@ -101,13 +101,13 @@ class RamanujanSwiGLU(nn.Module):
         return self.down_proj(F.silu(self.gate_proj(x)) * self.up_proj(x))
 
 
-class RamanujanBlock(nn.Module):
+class MyLLMBlock(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.input_norm = RamanujanRMSNorm(config.hidden_size, config.rms_norm_eps)
-        self.attention = RamanujanAttention(config)
-        self.post_attention_norm = RamanujanRMSNorm(config.hidden_size, config.rms_norm_eps)
-        self.mlp = RamanujanSwiGLU(config)
+        self.input_norm = MyLLMRMSNorm(config.hidden_size, config.rms_norm_eps)
+        self.attention = MyLLMAttention(config)
+        self.post_attention_norm = MyLLMRMSNorm(config.hidden_size, config.rms_norm_eps)
+        self.mlp = MyLLMSwiGLU(config)
 
     def forward(self, x, attention_mask=None, position_ids=None, past_key_value=None,
                 use_cache=False, cache=None, layer_idx=None):
@@ -120,10 +120,10 @@ class RamanujanBlock(nn.Module):
         return x + self.mlp(self.post_attention_norm(x)), new_past_key_value
 
 
-class RamanujanPreTrainedModel(PreTrainedModel):
-    config_class = RamanujanConfig
+class MyLLMPreTrainedModel(PreTrainedModel):
+    config_class = MyLLMConfig
     base_model_prefix = ""
-    _no_split_modules = ["RamanujanBlock"]
+    _no_split_modules = ["MyLLMBlock"]
     _supports_flash_attn = False
     _supports_sdpa = True
     _supports_cache_class = False
@@ -134,14 +134,14 @@ class RamanujanPreTrainedModel(PreTrainedModel):
             nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
 
-class RamanujanForCausalLM(RamanujanPreTrainedModel, GenerationMixin):
+class MyLLMForCausalLM(MyLLMPreTrainedModel, GenerationMixin):
     _tied_weights_keys = {"lm_head.weight": "embed_tokens.weight"}
 
     def __init__(self, config):
         super().__init__(config)
         self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size)
-        self.layers = nn.ModuleList([RamanujanBlock(config) for _ in range(config.num_hidden_layers)])
-        self.norm = RamanujanRMSNorm(config.hidden_size, config.rms_norm_eps)
+        self.layers = nn.ModuleList([MyLLMBlock(config) for _ in range(config.num_hidden_layers)])
+        self.norm = MyLLMRMSNorm(config.hidden_size, config.rms_norm_eps)
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
         self.post_init()
 
@@ -242,4 +242,3 @@ class RamanujanForCausalLM(RamanujanPreTrainedModel, GenerationMixin):
             loss=loss, logits=logits,
             past_key_values=present,
         )
-

@@ -1,12 +1,12 @@
 {
   "architectures": [
-    "RamanujanForCausalLM"
+    "MyLLMForCausalLM"
   ],
   "auto_map": {
-    "AutoConfig": "configuration_ramanujan.RamanujanConfig",
-    "AutoModelForCausalLM": "modeling_ramanujan.RamanujanForCausalLM"
+    "AutoConfig": "configuration_myllm.MyLLMConfig",
+    "AutoModelForCausalLM": "modeling_myllm.MyLLMForCausalLM"
   },
-  "model_type": "ramanujan",
+  "model_type": "myllm",
   "vocab_size": 65536,
   "hidden_size": 1792,
   "num_hidden_layers": 28,

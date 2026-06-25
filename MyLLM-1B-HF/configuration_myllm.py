@@ -1,8 +1,8 @@
 from transformers import PretrainedConfig
 
 
-class RamanujanConfig(PretrainedConfig):
-    model_type = "ramanujan"
+class MyLLMConfig(PretrainedConfig):
+    model_type = "myllm"
     keys_to_ignore_at_inference = ["past_key_values"]
 
     def __init__(
@@ -43,4 +43,3 @@ class RamanujanConfig(PretrainedConfig):
         self.rms_norm_eps = rms_norm_eps
         self.hidden_act = "silu"
         self.use_cache = False
-
