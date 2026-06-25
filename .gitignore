@@ -1,0 +1,4 @@
+# Large model weights are distributed as GitHub Release assets, not committed.
+*.gguf
+*.safetensors
+__pycache__/
