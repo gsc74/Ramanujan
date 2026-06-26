@@ -72,7 +72,7 @@ Optional settings (environment variables):
 | `DEVICE` | `cpu` | torch device: `cpu` or `cuda` |
 | `MAX_NEW` | `256` | max new tokens per reply |
 | `THREADS` | `64` | CPU threads |
-| `TEMPERATURE` | `0.7` | sampling temperature |
+| `TEMPERATURE` | `0` | sampling temperature (`0` = greedy, best for math; raise for more variety) |
 | `REPETITION_PENALTY` | `1.3` | discourages repetition |
 
 ```bash

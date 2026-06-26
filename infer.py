@@ -14,7 +14,7 @@ DEVICE = sys.argv[2] if len(sys.argv) > 2 else os.environ.get("DEVICE", "cpu")
 MAX_NEW = int(sys.argv[3]) if len(sys.argv) > 3 else int(os.environ.get("MAX_NEW", "256"))
 
 # Sampling controls (env-overridable). Defaults tuned to avoid degenerate loops.
-TEMPERATURE = float(os.environ.get("TEMPERATURE", "0.7"))
+TEMPERATURE = float(os.environ.get("TEMPERATURE", "0"))
 TOP_P = float(os.environ.get("TOP_P", "0.9"))
 TOP_K = int(os.environ.get("TOP_K", "40"))
 REPETITION_PENALTY = float(os.environ.get("REPETITION_PENALTY", "1.3"))
