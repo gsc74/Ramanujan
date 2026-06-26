@@ -107,6 +107,14 @@ So, we have: (1/3) x³ + C₀
 Therefore: \boxed{\frac{1}{3}x^{3}}
 ```
 
+**Prompt:** `What is the derivative of x^2?`
+
+```
+Using the power rule, d/dx(xⁿ) = n·x^(n-1).
+
+Therefore, the derivative of x² is 2x^(2-1) = 2x.
+```
+
 **Prompt:** `What is a black hole?`
 
 ```
