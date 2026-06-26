@@ -33,7 +33,52 @@ A **1.05B-parameter** decoder-only model for student tutoring in math and Englis
 
 > The model weights (`model-0000*.safetensors`, ~2 GB total) are attached as a **GitHub Release asset**. Clone the repo and drop them into `MyLLM-1B-HF/`.
 
+## Prerequisites
+
+- **Python 3.9+**
+- **PyTorch** and **Transformers** (`pip install torch transformers`)
+- The model files: clone this repo and place the `model-0000*.safetensors` weights from the [latest Release](https://github.com/gsc74/MyLLM/releases/latest) into `MyLLM-1B-HF/`.
+
+```bash
+git clone https://github.com/gsc74/MyLLM.git
+cd MyLLM
+# download the safetensors from the Release into MyLLM-1B-HF/
+pip install torch transformers
+```
+
+Runs on **CPU** (default) or **GPU** (`DEVICE=cuda`). About 2 GB of RAM/VRAM is needed for the BF16 weights.
+
 ## Usage
+
+### Chat with `infer.sh` (interactive)
+
+The easiest way to chat with the model is the bundled script:
+
+```bash
+./infer.sh
+```
+
+It loads `MyLLM-1B-HF/` and starts an interactive prompt. Type a question, press Enter, and type `quit` (or Ctrl+D) to exit:
+
+```
+You: What is 2+2?
+MyLLM: The answer is 4.
+```
+
+Optional settings (environment variables):
+
+| Variable | Default | Description |
+|---|---|---|
+| `DEVICE` | `cpu` | torch device: `cpu` or `cuda` |
+| `MAX_NEW` | `256` | max new tokens per reply |
+| `THREADS` | `64` | CPU threads |
+| `TEMPERATURE` | `0.7` | sampling temperature |
+| `REPETITION_PENALTY` | `1.3` | discourages repetition |
+
+```bash
+# example: run on GPU with shorter replies
+DEVICE=cuda MAX_NEW=128 ./infer.sh
+```
 
 ### Transformers (PyTorch)
 
