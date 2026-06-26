@@ -107,6 +107,14 @@ So, we have: (1/3) x³ + C₀
 Therefore: \boxed{\frac{1}{3}x^{3}}
 ```
 
+**Prompt:** `What is a black hole?`
+
+```
+A black hole is an object in space that has not been fully formed, but has been heated to millions of degrees by its own gravity. The gravitational force between two objects with masses greater than or equal to that of the sun can cause them to collapse into each other, forming a singularity—a point where they become so dense that nothing, including light, can escape from it.
+```
+
+> MyLLM is a tiny model focused on high-school math. It can chat in English, but answers outside math may be incomplete or inaccurate.
+
 ## Training Data & Licenses
 
 | Stage | Dataset | Amount | License |
