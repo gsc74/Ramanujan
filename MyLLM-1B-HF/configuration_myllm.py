@@ -43,3 +43,4 @@ class MyLLMConfig(PretrainedConfig):
         self.rms_norm_eps = rms_norm_eps
         self.hidden_act = "silu"
         self.use_cache = False
+

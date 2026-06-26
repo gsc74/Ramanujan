@@ -10,8 +10,8 @@ tags:
 # MyLLM-1B
 
 MyLLM-1B is a 1.055B-parameter decoder-only math language model trained on
-OpenWebMath, supervised fine-tuned on mixed math/instruction data, and aligned
-with DPO.
+OpenWebMath plus general educational English, supervised fine-tuned on mixed math/instruction data, and aligned
+with GRPO, DPO, and English GRPO.
 
 The model uses 28 layers, hidden size 1792, 14 attention heads, 2 KV heads,
 SwiGLU, RMSNorm, interleaved RoPE (`theta=500000`), and an 8192-token context.

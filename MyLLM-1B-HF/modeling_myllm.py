@@ -242,3 +242,4 @@ class MyLLMForCausalLM(MyLLMPreTrainedModel, GenerationMixin):
             loss=loss, logits=logits,
             past_key_values=present,
         )
+
