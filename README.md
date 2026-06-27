@@ -4,7 +4,7 @@
 
 **A tiny math and English tutor for students that runs on your laptop.**
 
-[![Transformers](https://img.shields.io/badge/format-Transformers-blue)](#download) [![Params](https://img.shields.io/badge/params-1.05B-green)](#model-summary) [![Runs on](https://img.shields.io/badge/runs%20on-PyTorch-orange)](#usage) [![License](https://img.shields.io/badge/license-Apache--2.0-lightgrey)](#license)
+[![Transformers](https://img.shields.io/badge/format-Transformers-blue)](#download) [![GGUF](https://img.shields.io/badge/format-GGUF-purple)](#download) [![Params](https://img.shields.io/badge/params-1.05B-green)](#model-summary) [![Runs on](https://img.shields.io/badge/runs%20on-PyTorch%20%7C%20llama.cpp-orange)](#usage) [![License](https://img.shields.io/badge/license-Apache--2.0-lightgrey)](#license)
 
 </div>
 
@@ -30,8 +30,9 @@ A **1.05B-parameter** decoder-only model for student tutoring in math and Englis
 | Format | Use for | Link |
 |---|---|---|
 | Transformers (safetensors) | Python / PyTorch | [MyLLM-1B-HF/](https://github.com/gsc74/MyLLM/tree/main/MyLLM-1B-HF) + [weights from Release](https://github.com/gsc74/MyLLM/releases/latest) |
+| GGUF (BF16) | llama.cpp / LM Studio / Ollama | [MyLLM-1B-BF16.gguf](https://github.com/gsc74/MyLLM/releases/latest/download/MyLLM-1B-BF16.gguf) |
 
-> The model weights (`model-0000*.safetensors`, ~2 GB total) are attached as a **GitHub Release asset**. Clone the repo and drop them into `MyLLM-1B-HF/`.
+> The model weights (`model-0000*.safetensors`, ~2 GB total) and the single-file **`MyLLM-1B-BF16.gguf`** (~2 GB) are attached as **GitHub Release assets**. For PyTorch, clone the repo and drop the safetensors into `MyLLM-1B-HF/`. For llama.cpp / LM Studio, just download the `.gguf`.
 
 ## Prerequisites
 
@@ -93,6 +94,31 @@ msgs = [{"role": "user", "content": "What is 2+2?"}]
 inputs = tok.apply_chat_template(msgs, add_generation_prompt=True, return_tensors="pt", return_dict=True)
 out = model.generate(**inputs, max_new_tokens=128, temperature=0.7, repetition_penalty=1.3)
 print(tok.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True))
+```
+
+### Run with llama.cpp / LM Studio (GGUF)
+
+Download **[MyLLM-1B-BF16.gguf](https://github.com/gsc74/MyLLM/releases/latest/download/MyLLM-1B-BF16.gguf)** — a single BF16 file (~2 GB) with the chat template and a default math system prompt already embedded, so it works out of the box.
+
+**LM Studio** (macOS / Windows / Linux): drop the `.gguf` into your models folder (or use *My Models → Import*), select it, and chat. On Apple Silicon it runs on Metal and is far faster than CPU PyTorch. Recommended generation parameters (match the PyTorch defaults):
+
+| LM Studio setting | Value | Notes |
+|---|---|---|
+| Temperature | `0` | greedy — best for math; raise to `0.7` for variety |
+| Top K | `40` | |
+| Top P | `0.9` | |
+| Repeat Penalty | `1.3` | stops a small model from looping |
+| Repeat Last N | `64` | window the repeat penalty looks back over |
+| Max Tokens | `256` | length cap per reply |
+
+> The system prompt and chat template are baked into the GGUF; you don't need to set them in LM Studio. Providing your own system message overrides the embedded one.
+
+**llama.cpp** command line (single-shot):
+
+```bash
+llama-cli -m MyLLM-1B-BF16.gguf --jinja -st --temp 0 -n 256 \
+  --repeat-penalty 1.3 --repeat-last-n 64 \
+  -p "What is the derivative of x^2?"
 ```
 
 ## Example
