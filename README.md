@@ -113,6 +113,12 @@ Download **[MyLLM-1B-BF16.gguf](https://github.com/gsc74/MyLLM/releases/latest/d
 
 > The system prompt and chat template are baked into the GGUF; you don't need to set them in LM Studio. Providing your own system message overrides the embedded one.
 
+**Quick start with the bundled preset.** Instead of setting the values above by hand, import [`MyLLM.preset.json`](MyLLM.preset.json) (it sets temperature, top-k/top-p, repeat penalty, max tokens, and stop strings that trim the model's trailing boilerplate). The order matters:
+
+1. Download `MyLLM-1B-BF16.gguf` from the [latest Release](https://github.com/gsc74/MyLLM/releases/latest) and import/load it in LM Studio first.
+2. Then import `MyLLM.preset.json` (chat sidebar → preset selector → **Import preset**).
+3. Select the **MyLLM** preset for the loaded model and start chatting.
+
 **llama.cpp** command line (single-shot):
 
 ```bash

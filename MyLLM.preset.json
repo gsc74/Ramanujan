@@ -1,0 +1,55 @@
+{
+  "identifier": "@local:my-llm",
+  "name": "MyLLM",
+  "changed": false,
+  "operation": {
+    "fields": [
+      {
+        "key": "llm.prediction.temperature",
+        "value": 0
+      },
+      {
+        "key": "llm.prediction.topKSampling",
+        "value": 40
+      },
+      {
+        "key": "llm.prediction.topPSampling",
+        "value": {
+          "checked": true,
+          "value": 0.9
+        }
+      },
+      {
+        "key": "llm.prediction.repeatPenalty",
+        "value": {
+          "checked": true,
+          "value": 1.3
+        }
+      },
+      {
+        "key": "llm.prediction.llama.presencePenalty",
+        "value": {
+          "checked": false,
+          "value": 0
+        }
+      },
+      {
+        "key": "llm.prediction.maxPredictedTokens",
+        "value": {
+          "checked": true,
+          "value": 256
+        }
+      },
+      {
+        "key": "llm.prediction.stopStrings",
+        "value": [
+          "This problem",
+          "Final Answer: The answer is"
+        ]
+      }
+    ]
+  },
+  "load": {
+    "fields": []
+  }
+}
