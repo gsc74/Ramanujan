@@ -98,13 +98,13 @@ print(tok.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True
 
 ### Run with llama.cpp / LM Studio (GGUF)
 
-Download **[MyLLM-1B-BF16.gguf](https://github.com/gsc74/MyLLM/releases/latest/download/MyLLM-1B-BF16.gguf)** — a single BF16 file (~2 GB) with the chat template and a default math system prompt already embedded, so it works out of the box.
+Download **[MyLLM-1B-BF16.gguf](https://github.com/gsc74/MyLLM/releases/latest/download/MyLLM-1B-BF16.gguf)** - a single BF16 file (~2 GB) with the chat template and a default math system prompt already embedded, so it works out of the box.
 
-**LM Studio** (macOS / Windows / Linux): drop the `.gguf` into your models folder (or use *My Models → Import*), select it, and chat. On Apple Silicon it runs on Metal and is far faster than CPU PyTorch. Recommended generation parameters (match the PyTorch defaults):
+**LM Studio** (cross-platform): drop the `.gguf` into your models folder (or use *My Models > Import*), select it, and chat. On a supported GPU it is far faster than CPU PyTorch. Recommended generation parameters (match the PyTorch defaults):
 
 | LM Studio setting | Value | Notes |
 |---|---|---|
-| Temperature | `0` | greedy — best for math; raise to `0.7` for variety |
+| Temperature | `0` | greedy - best for math; raise to `0.7` for variety |
 | Top K | `40` | |
 | Top P | `0.9` | |
 | Repeat Penalty | `1.3` | stops a small model from looping |
@@ -144,7 +144,7 @@ Therefore, the derivative of x² is 2x^(2-1) = 2x.
 **Prompt:** `What is a black hole?`
 
 ```
-A black hole is an object in space that has not been fully formed, but has been heated to millions of degrees by its own gravity. The gravitational force between two objects with masses greater than or equal to that of the sun can cause them to collapse into each other, forming a singularity—a point where they become so dense that nothing, including light, can escape from it.
+A black hole is an object in space that has not been fully formed, but has been heated to millions of degrees by its own gravity. The gravitational force between two objects with masses greater than or equal to that of the sun can cause them to collapse into each other, forming a singularity, a point where they become so dense that nothing, including light, can escape from it.
 ```
 
 > MyLLM is a tiny model focused on high-school math. It can chat in English, but answers outside math may be incomplete or inaccurate.
